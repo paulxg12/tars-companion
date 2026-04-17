@@ -231,55 +231,112 @@
 
         .eye-module {
             position: relative;
-            width: 50px;
-            height: 50px;
-            background: #111;
-            border: 2px solid #00ff88;
-            border-radius: 4px;
+            width: 65px;
+            height: 80px;
+            background: linear-gradient(145deg, #1a1a2e, #0a0a15);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: 
+                inset 0 5px 20px rgba(0,0,0,0.8),
+                inset 0 -5px 15px rgba(0,0,0,0.5),
+                0 3px 10px rgba(0,0,0,0.5);
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
         }
 
-        .eye-laser {
-            width: 30px;
-            height: 30px;
-            background: radial-gradient(circle, #ff0000 0%, #cc0000 50%, #660000 100%);
+        .eye-display {
+            position: relative;
+            width: 50px;
+            height: 65px;
+            background: radial-gradient(ellipse at 50% 40%, 
+                #aaddff 0%, 
+                #66bbff 20%, 
+                #3399ff 40%,
+                #2288ee 60%,
+                #1166cc 100%);
+            border-radius: 50% 50% 50% 50% / 55% 55% 45% 45%;
+            box-shadow: 
+                0 0 20px rgba(100, 180, 255, 0.5),
+                0 0 40px rgba(100, 180, 255, 0.3),
+                0 0 60px rgba(100, 180, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease-out;
+        }
+
+        .eye-highlight {
+            position: absolute;
+            width: 10px;
+            height: 7px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            top: 12px;
+            left: 8px;
+            pointer-events: none;
+        }
+
+        .eye-highlight-2 {
+            position: absolute;
+            width: 4px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            bottom: 18px;
+            right: 10px;
+            pointer-events: none;
+        }
+
+        .eye-inner {
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle at 30% 30%, 
+                #ff6666 0%, 
+                #ff0000 50%, 
+                #cc0000 100%);
             border-radius: 50%;
             box-shadow: 
-                0 0 20px rgba(255, 0, 0, 0.8),
-                0 0 40px rgba(255, 0, 0, 0.5),
-                0 0 60px rgba(255, 0, 0, 0.3),
-                inset 0 0 10px rgba(255, 255, 255, 0.3);
-            transition: all 0.3s;
+                0 0 12px rgba(255, 100, 100, 0.8),
+                0 0 25px rgba(255, 50, 50, 0.5);
+            transition: transform 0.1s ease-out;
+            position: absolute;
         }
 
-        .eye-module.listening .eye-laser {
+        /* Eye states */
+        .eye-module.listening .eye-display {
             box-shadow: 
-                0 0 30px rgba(255, 0, 0, 1),
-                0 0 60px rgba(255, 0, 0, 0.7),
-                0 0 90px rgba(255, 0, 0, 0.5),
-                inset 0 0 10px rgba(255, 255, 255, 0.5);
-            transform: scale(1.1);
+                0 0 30px rgba(100, 200, 255, 0.7),
+                0 0 60px rgba(100, 200, 255, 0.4);
+            transform: scale(1.05);
         }
 
-        .eye-module.thinking .eye-laser {
-            animation: laser-pulse 1.5s ease-in-out infinite;
+        .eye-module.thinking .eye-display {
+            animation: eye-think 1.5s ease-in-out infinite;
         }
 
-        @keyframes laser-pulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 0, 0, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(255, 0, 0, 1), 0 0 80px rgba(255, 0, 0, 0.7); }
+        @keyframes eye-think {
+            0%, 100% { box-shadow: 0 0 20px rgba(100, 180, 255, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(100, 180, 255, 0.8); }
         }
 
-        .eye-module.speaking .eye-laser {
-            animation: laser-speak 0.3s ease-in-out infinite;
+        .eye-module.speaking .eye-display {
+            background: radial-gradient(ellipse at 50% 40%, 
+                #bbffff 0%, 
+                #77ddff 30%, 
+                #44aadd 100%);
+            box-shadow: 
+                0 0 35px rgba(100, 220, 255, 0.8),
+                0 0 70px rgba(100, 220, 255, 0.4);
         }
 
-        @keyframes laser-speak {
+        .eye-module.speaking .eye-inner {
+            animation: inner-pulse 0.3s ease-in-out infinite;
+        }
+
+        @keyframes inner-pulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
+            50% { transform: scale(1.2); }
         }
 
         /* Bottom panels */
@@ -615,10 +672,18 @@
                 <div class="main-display-inner">
                     <div class="eyes-container">
                         <div class="eye-module" id="eyeLeft">
-                            <div class="eye-laser"></div>
+                            <div class="eye-display">
+                                <div class="eye-highlight"></div>
+                                <div class="eye-highlight-2"></div>
+                                <div class="eye-inner" id="innerLeft"></div>
+                            </div>
                         </div>
                         <div class="eye-module" id="eyeRight">
-                            <div class="eye-laser"></div>
+                            <div class="eye-display">
+                                <div class="eye-highlight"></div>
+                                <div class="eye-highlight-2"></div>
+                                <div class="eye-inner" id="innerRight"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -662,13 +727,11 @@
 
     <div class="transcript" id="transcript"></div>
 
+    <script src="config.js"></script>
     <script>
         // TARS - Your AI Companion
-        // Get your free API keys at:
-        // Groq: https://console.groq.com/keys
-        // Fish Audio: https://fish.audio/
-        const GROQ_API_KEY = ''; // Add your Groq API key here
-        const FISH_API_KEY = ''; // Add your Fish Audio API key here
+        const GROQ_API_KEY = window.CONFIG?.groqApiKey || '';
+        const FISH_API_KEY = window.CONFIG?.fishApiKey || '';
         const TARS_VOICE_ID = '385692c16f2d41f6998596a2c63a8d52';
         const USE_FISH_AUDIO = FISH_API_KEY !== '';
 
@@ -685,6 +748,8 @@
         const tarsBody = document.getElementById('tarsBody');
         const eyeLeft = document.getElementById('eyeLeft');
         const eyeRight = document.getElementById('eyeRight');
+        const innerLeft = document.getElementById('innerLeft');
+        const innerRight = document.getElementById('innerRight');
         const light1 = document.getElementById('light1');
         const light2 = document.getElementById('light2');
         const light3 = document.getElementById('light3');
@@ -695,6 +760,28 @@
         const tapHint = document.getElementById('tapHint');
         const transcript = document.getElementById('transcript');
         const transcriptToggle = document.getElementById('transcriptToggle');
+
+        // Mouse tracking for eyes
+        function trackMouse(e) {
+            if (state.emotion === 'listening' || state.emotion === 'thinking' || state.emotion === 'speaking') return;
+            
+            const eyesContainer = document.querySelector('.eyes-container');
+            const rect = eyesContainer.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            const deltaX = (e.clientX - centerX) / window.innerWidth;
+            const deltaY = (e.clientY - centerY) / window.innerHeight;
+            
+            const maxMove = 8;
+            const moveX = deltaX * maxMove * 15;
+            const moveY = deltaY * maxMove * 10;
+            
+            innerLeft.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            innerRight.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        }
+
+        document.addEventListener('mousemove', trackMouse);
 
         // Audio context for TARS beeps
         let audioCtx;
